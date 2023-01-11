@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Logger</title>
+    <link rel="stylesheet" type="text/css" href="styleViewLogs.css" />
+    <script type="text/javascript">
+      function redirect() {
+        window.location = "addLogs";
+      }
+
+      async function fetchLogs() {
+        var res = await fetch("./getLogs");
+        var data = await res.json();
+        var tableBody = document.getElementById("my_table");
+
+        data.data.forEach((row) => {
+          let tableRow = document.createElement("tr");
+
+          let tableCellTimeStamp = document.createElement("td");
+          tableCellTimeStamp.innerHTML = new Date(
+            parseInt(row.timestamp)
+          ).toLocaleString();
+
+          let tableCellStatus = document.createElement("td");
+          tableCellStatus.innerHTML = row.status;
+
+          let tableCellOperation = document.createElement("td");
+          tableCellOperation.innerHTML = row.operation;
+
+          let tableCellMessage = document.createElement("td");
+          tableCellMessage.innerHTML = row.message;
+
+          tableRow.append(tableCellTimeStamp);
+          tableRow.append(tableCellStatus);
+          tableRow.append(tableCellOperation);
+          tableRow.append(tableCellMessage);
+
+          tableBody.append(tableRow);
+        });
+      }
+    </script>
+  </head>
+  <body onload="fetchLogs()">
+    <h3>View Logs</h3>
+    <button onclick="redirect()">Add Logs</button>
+    <table>
+      <thead>
+        <tr>
+          <th>TimeStamp :</th>
+          <th>Status :</th>
+          <th>Operation :</th>
+          <th>Message :</th>
+        </tr>
+      </thead>
+      <tbody id="my_table"></tbody>
+    </table>
+  </body>
+</html>
